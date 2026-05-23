@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>肖鑫涛 · 平面设计师</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --dark: #0f0f23;
+      --dark-light: #1a1a2e;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --glass: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Sans SC', 'Space Grotesk', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Cursor */
+    .cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, background 0.15s ease;
+      transform: translate(-50%, -50%);
+    }
+
+    .cursor.hover {
+      transform: translate(-50%, -50%) scale(1.5);
+      background: var(--primary);
+    }
+
+    /* Noise overlay */
+    .noise {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Selection */
+    ::selection {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      background: rgba(15, 15, 35, 0.8);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 0 5%;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 70% 70%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+      animation: rotate 60s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .hero-content {
+      text-align: center;
+      z-index: 1;
+      max-width: 900px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-badge span {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient 8s ease infinite;
+    }
+
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-desc {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 50px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: var(--glass);
+      border-color: var(--primary);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      animation: bounce 2s ease infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    .scroll-indicator svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Stats Section */
+    .stats {
+      padding: 5rem 5%;
+      background: var(--dark-light);
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 3.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Works Section */
+    .works {
+      padding: 8rem 5%;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-tag {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+    }
+
+    /* Filter */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-color: transparent;
+      color: white;
+    }
+
+    /* Works Grid */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .work-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .work-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      box-shadow: 0 30px 60px rgba(99, 102, 241, 0.2);
+    }
+
+    .work-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .work-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .work-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .work-card:hover .work-image {
+      transform: scale(1.05);
+    }
+
+    .work-image-wrapper {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .work-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(15, 15, 35, 0.9));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .work-card:hover .work-overlay {
+      opacity: 1;
+    }
+
+    .work-overlay-text {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+      color: white;
+      font-weight: 600;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .work-card:hover .work-overlay-text {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .work-content {
+      padding: 1.5rem;
+    }
+
+    .work-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .work-tag {
+      padding: 0.25rem 0.75rem;
+      background: rgba(99, 102, 241, 0.1);
+      border-radius: 50px;
+      font-size: 0.75rem;
+      color: var(--primary-light);
+    }
+
+    .work-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .work-excerpt {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 15, 35, 0.95);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--dark-light);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.4s ease;
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-close {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50%;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .modal-close:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .modal-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 24px 24px 0 0;
+    }
+
+    .modal-content {
+      padding: 2.5rem;
+    }
+
+    .modal-header {
+      margin-bottom: 2rem;
+    }
+
+    .modal-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .modal-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .modal-tag {
+      padding: 0.5rem 1rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: var(--primary-light);
+    }
+
+    .modal-section {
+      margin-bottom: 2rem;
+    }
+
+    .modal-section h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-section h3 svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .modal-section p {
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    .modal-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .step {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--glass);
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-content p {
+      font-size: 0.9rem;
+    }
+
+    .modal-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .modal-gallery img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+    }
+
+    /* Process Section */
+    .process {
+      padding: 8rem 5%;
+      background: var(--dark-light);
+    }
+
+    .process-timeline {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .process-timeline::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+
+    .process-item {
+      position: relative;
+      padding-left: 60px;
+      margin-bottom: 3rem;
+    }
+
+    .process-dot {
+      position: absolute;
+      left: 10px;
+      top: 0;
+      width: 22px;
+      height: 22px;
+      background: var(--dark);
+      border: 3px solid var(--primary);
+      border-radius: 50%;
+    }
+
+    .process-item:nth-child(2) .process-dot { border-color: var(--accent); }
+    .process-item:nth-child(3) .process-dot { border-color: var(--secondary); }
+    .process-item:nth-child(4) .process-dot { border-color: #22c55e; }
+
+    .process-content {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .process-content:hover {
+      border-color: var(--primary);
+      transform: translateX(10px);
+    }
+
+    .process-number {
+      font-size: 0.8rem;
+      color: var(--primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+    }
+
+    .process-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .process-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Skills Section */
+    .skills {
+      padding: 8rem 5%;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .skill-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.4s ease;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+    }
+
+    .skill-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+
+    .skill-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .skill-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .skill-tag {
+      padding: 0.25rem 0.75rem;
+      background: rgba(99, 102, 241, 0.1);
+      border-radius: 50px;
+      font-size: 0.75rem;
+      color: var(--primary-light);
+    }
+
+    /* Contact Section */
+    .contact {
+      padding: 8rem 5%;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+      text-align: center;
+    }
+
+    .contact-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .contact-desc {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .contact-link:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .contact-link svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 5%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    footer span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .works-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-image {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- Custom Cursor -->
+<div class="cursor"></div>
+
+<!-- Noise Overlay -->
+<div class="noise"></div>
+
+<!-- Navigation -->
+<nav>
+  <div class="logo">肖鑫涛.</div>
+  <ul class="nav-links">
+    <li><a href="#works">作品</a></li>
+    <li><a href="#process">流程</a></li>
+    <li><a href="#skills">技能</a></li>
+    <li><a href="#contact">联系</a></li>
+  </ul>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <!--            <div class="hero-badge">-->
+    <!--                <span></span>-->
+    <!--                开放项目合作-->
+    <!--            </div>-->
+    <h1>让想法<span class="gradient-text">可视化</span></h1>
+    <p class="hero-desc">
+      3年电商设计经验，专注于打造有情感、有温度的产品。
+      相信好的设计是解决问题的艺术。
+    </p>
+    <div class="hero-cta">
+      <a href="#works" class="btn btn-primary">查看作品集</a>
+      <!--                <a href="#contact" class="btn btn-secondary">获取报价</a>-->
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>向下滚动</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M19 12l-7 7-7-7"/>
+    </svg>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-number">80+</div>
+      <div class="stat-label">已完成项目</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">28</div>
+      <div class="stat-label">合作客户</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">6</div>
+      <div class="stat-label">获得奖项</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">99%</div>
+      <div class="stat-label">客户好评</div>
+    </div>
+  </div>
+</section>
+
+<!-- Works Section -->
+<section class="works" id="works">
+  <div class="section-header">
+    <span class="section-tag">Portfolio</span>
+    <h2 class="section-title">精选作品</h2>
+    <p class="section-desc">每一个设计都是一次突破，用设计讲述产品故事</p>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">全部</button>
+    <button class="filter-btn" data-filter="ui">UI设计</button>
+    <button class="filter-btn" data-filter="brand">品牌视觉</button>
+    <button class="filter-btn" data-filter="web">网页设计</button>
+    <button class="filter-btn" data-filter="motion">动效设计</button>
+  </div>
+
+  <div class="works-grid" id="worksGrid">
+    <!-- Works will be populated by JavaScript -->
+  </div>
+</section>
+
+<!-- Process Section -->
+<section class="process" id="process">
+  <div class="section-header">
+    <span class="section-tag">Process</span>
+    <h2 class="section-title">设计流程</h2>
+    <p class="section-desc">系统化的方法论，确保每一个项目都能达到预期</p>
+  </div>
+
+  <div class="process-timeline">
+    <div class="process-item">
+      <div class="process-dot"></div>
+      <div class="process-content">
+        <div class="process-number">Step 01</div>
+        <h3 class="process-title">需求洞察</h3>
+        <p class="process-desc">深入了解业务目标、用户痛点和市场定位，通过用户访谈、竞品分析等方式建立清晰的设计方向。</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-dot"></div>
+      <div class="process-content">
+        <div class="process-number">Step 02</div>
+        <h3 class="process-title">策略规划</h3>
+        <p class="process-desc">制定设计方案框架，包括信息架构、交互流程和视觉风格方向，确保设计决策有理有据。</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-dot"></div>
+      <div class="process-content">
+        <div class="process-number">Step 03</div>
+        <h3 class="process-title">设计执行</h3>
+        <p class="process-desc">从低保真原型到高保真设计稿，注重细节和体验流畅性，反复推敲每一个交互和视觉元素。</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-dot"></div>
+      <div class="process-content">
+        <div class="process-number">Step 04</div>
+        <h3 class="process-title">验证优化</h3>
+        <p class="process-desc">通过用户测试收集反馈，持续迭代优化，确保最终交付物能够真正解决用户问题。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills Section -->
+<section class="skills" id="skills">
+  <div class="section-header">
+    <span class="section-tag">Expertise</span>
+    <h2 class="section-title">专业能力</h2>
+    <p class="section-desc">多维度的技能组合，为项目提供全方位的支持</p>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">🎨</div>
+      <h3 class="skill-title">UI/UX设计</h3>
+      <p class="skill-desc">从用户研究到界面落地，打造流畅且美观的数字产品体验。</p>
+      <div class="skill-tags">
+        <span class="skill-tag">Figma</span>
+        <span class="skill-tag">Sketch</span>
+        <span class="skill-tag">Adobe XD</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">✨</div>
+      <h3 class="skill-title">品牌视觉</h3>
+      <p class="skill-desc">构建完整的品牌视觉系统，包括Logo、VI和视觉语言。</p>
+      <div class="skill-tags">
+        <span class="skill-tag">Illustrator</span>
+        <span class="skill-tag">品牌策略</span>
+        <span class="skill-tag">IP设计</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🎬</div>
+      <h3 class="skill-title">动效设计</h3>
+      <p class="skill-desc">通过微交互和动效增强产品表现力，提升用户体验。</p>
+      <div class="skill-tags">
+        <span class="skill-tag">After Effects</span>
+        <span class="skill-tag">Principle</span>
+        <span class="skill-tag">Lottie</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🚀</div>
+      <h3 class="skill-title">前端实现</h3>
+      <p class="skill-desc">理解设计与代码的边界，确保设计稿能够高质量还原。</p>
+      <div class="skill-tags">
+        <span class="skill-tag">HTML/CSS</span>
+        <span class="skill-tag">Vue</span>
+        <span class="skill-tag">React</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<!--    <section class="contact" id="contact">-->
+<!--        <div class="contact-content">-->
+<!--            <h2 class="contact-title">开始你的下一个项目</h2>-->
+<!--            <p class="contact-desc">无论是全新产品设计还是品牌升级，我都能帮你找到最优解。</p>-->
+<!--            <div class="contact-links">-->
+<!--                <a href="mailto:linxiao@design.com" class="contact-link">-->
+<!--                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">-->
+<!--                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>-->
+<!--                        <polyline points="22,6 12,13 2,6"/>-->
+<!--                    </svg>-->
+<!--                    发送邮件-->
+<!--                </a>-->
+<!--                <a href="#" class="contact-link">-->
+<!--                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">-->
+<!--                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>-->
+<!--                    </svg>-->
+<!--                    预约咨询-->
+<!--                </a>-->
+<!--                <a href="#" class="contact-link">-->
+<!--                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">-->
+<!--                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>-->
+<!--                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>-->
+<!--                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>-->
+<!--                    </svg>-->
+<!--                    关注小红书-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 肖鑫涛 · 用心设计每一帧 <span>❤</span></p>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <button class="modal-close" id="modalClose">×</button>
+  <div class="modal" id="modal">
+    <!-- Modal content will be populated by JavaScript -->
+  </div>
+</div>
+
+<script>
+  // Work Data
+  const works = [
+    {
+      id: 1,
+      title: "悦己生活 App",
+      category: "ui",
+      tags: ["UI设计", "iOS", "交互设计"],
+      image: "https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=800&q=80",
+      excerpt: "一款专注于女性健康管理的智能应用，帮助用户建立健康的生活习惯。",
+      description: "悦己生活是一款针对25-40岁都市女性设计的健康管理应用。设计理念是「轻盈不打扰」，通过温暖柔和的视觉语言和流畅的交互体验，让健康管理成为一件轻松愉快的事情。",
+      thinking: [
+        "通过用户调研发现，目标用户对传统健康应用的「打卡压力」感到焦虑",
+        "采用「生活陪伴」而非「任务管理」的设计定位，减少强制感",
+        "视觉上使用温暖的粉橙色系，传达积极向上的生活态度",
+        "交互上采用渐进式引导，让用户自然形成健康习惯"
+      ],
+      steps: [
+        { title: "用户研究", desc: "进行了30+用户访谈，理解核心需求和痛点" },
+        { title: "信息架构", desc: "梳理核心功能模块，建立清晰的导航结构" },
+        { title: "原型验证", desc: "通过可用性测试验证交互流程的合理性" },
+        { title: "视觉设计", desc: "从情绪板到设计系统，确保品牌一致性" },
+        { title: "开发协作", desc: "输出详细的设计规范，与开发团队紧密配合" }
+      ],
+      gallery: [
+        "https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=400&q=80",
+        "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&q=80",
+        "https://images.unsplash.com/photo-1616469829581-75993d86b84d?w=400&q=80"
+      ]
+    },
+    {
+      id: 2,
+      title: "山隐茶业 品牌重塑",
+      category: "brand",
+      tags: ["品牌视觉", "Logo设计", "包装设计"],
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+      excerpt: "为传统茶品牌注入现代美学，打造有文化底蕴的茶饮生活方式。",
+      description: "山隐茶业是一个有20年历史的传统茶品牌，面临品牌老化的挑战。重塑目标是让品牌年轻化但不失文化底蕴，吸引新一代茶文化爱好者。",
+      thinking: [
+        "保留了品牌原有的「山」元素，但用现代几何手法重新诠释",
+        "色彩上选择墨绿与暖白的搭配，传达自然与品质感",
+        "包装设计融入「山水画」意境，让喝茶成为一种美学体验",
+        "整体视觉系统具有高度延展性，便于不同场景应用"
+      ],
+      steps: [
+        { title: "品牌审计", desc: "分析现有品牌资产，识别可延续的元素" },
+        { title: "策略定位", desc: "明确目标人群和品牌核心价值" },
+        { title: "Logo设计", desc: "经过数十稿迭代，确定最终方案" },
+        { title: "VI系统", desc: "建立完整的视觉识别系统" },
+        { title: "包装落地", desc: "协调工厂生产，确保设计还原度" }
+      ],
+      gallery: [
+        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
+        "https://images.unsplash.com/photo-1597305877032-0668b3f5920e?w=400&q=80",
+        "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=400&q=80"
+      ]
+    },
+    {
+      id: 3,
+      title: "星辰音乐 播放器",
+      category: "web",
+      tags: ["网页设计", "播放器", "Dark Mode"],
+      image: "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=800&q=80",
+      excerpt: "打造沉浸式的音乐播放体验，让用户沉浸在音乐的世界里。",
+      description: "星辰音乐是一个独立的音乐播放网页，目标是提供不同于主流音乐平台的差异化体验。设计灵感来源于星空，创建一个沉浸、安静、专注的聆听空间。",
+      thinking: [
+        "采用深空黑背景配合渐变星光效果，营造沉浸氛围",
+        "界面元素极度精简，让音乐本身成为视觉焦点",
+        "交互反馈细腻，每一次点击都有愉悦的动效反馈",
+        "支持自定义主题，用户可以打造自己的音乐空间"
+      ],
+      steps: [
+        { title: "概念探索", desc: "从音乐可视化出发，探索不同的视觉方向" },
+        { title: "交互原型", desc: "用Principle制作可交互的动效原型" },
+        { title: "视觉设计", desc: "从极简主义出发，打造独特的视觉风格" },
+        { title: "前端开发", desc: "使用Web Audio API实现音频可视化" },
+        { title: "细节打磨", desc: "优化每一个像素和动效体验" }
+      ],
+      gallery: [
+        "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=400&q=80",
+        "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=80",
+        "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&q=80"
+      ]
+    },
+    {
+      id: 4,
+      title: "量子金融 数据大屏",
+      category: "ui",
+      tags: ["数据可视化", "Dashboard", "B端设计"],
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+      excerpt: "为金融机构打造的实时数据监控平台，让复杂数据一目了然。",
+      description: "量子金融是一个面向B端的数据分析平台，需要处理海量的金融数据。设计师的挑战是在信息密度和可读性之间找到平衡，让决策者能够快速获取关键信息。",
+      thinking: [
+        "采用「信息分层」策略，核心数据突出显示，次要信息可展开",
+        "使用蓝色渐变作为主色调，传达专业、可信赖的品牌调性",
+        "图表设计遵循数据可视化最佳实践，避免视觉干扰",
+        "支持自定义看板，用户可以根据角色定制显示内容"
+      ],
+      steps: [
+        { title: "需求梳理", desc: "与业务方深入沟通，理解核心使用场景" },
+        { title: "信息架构", desc: "整理数据指标，建立清晰的信息层级" },
+        { title: "原型设计", desc: "低保真原型验证布局和交互逻辑" },
+        { title: "高保真设计", desc: "设计完整的数据可视化组件库" },
+        { title: "开发支持", desc: "与前端团队协作，确保数据展示准确性" }
+      ],
+      gallery: [
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=80",
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=80",
+        "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&q=80"
+      ]
+    },
+    {
+      id: 5,
+      title: "NOVA 运动品牌",
+      category: "brand",
+      tags: ["品牌视觉", "运动品牌", "IP设计"],
+      image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      excerpt: "为新锐运动品牌构建年轻、活力、有态度的品牌形象。",
+      description: "NOVA是一个定位于18-25岁年轻人的运动品牌，主打「打破边界」的品牌理念。需要设计一个能够代表年轻一代态度的品牌视觉系统。",
+      thinking: [
+        "品牌名称NOVA意为「新星」，象征突破与爆发",
+        "Logo采用动态几何设计，传递速度感和力量感",
+        "色彩使用荧光绿+深黑的撞色，彰显年轻态度",
+        "设计了品牌IP「小Nova」作为品牌大使，增加亲和力"
+      ],
+      steps: [
+        { title: "品牌策略", desc: "明确品牌定位和目标人群特征" },
+        { title: "命名与Logo", desc: "从数十个方案中筛选确定NOVA" },
+        { title: "VI系统", desc: "建立完整的品牌视觉系统" },
+        { title: "IP设计", desc: "设计品牌吉祥物和表情包" },
+        { title: "应用设计", desc: "设计服装、包装、社交媒体等应用" }
+      ],
+      gallery: [
+        "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&q=80",
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80",
+        "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=80"
+      ]
+    },
+    {
+      id: 6,
+      title: "梦境美术馆 官网",
+      category: "web",
+      tags: ["官网设计", "艺术网站", "交互体验"],
+      image: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=800&q=80",
+      excerpt: "打造沉浸式的数字艺术展览空间，让艺术触手可及。",
+      description: "梦境美术馆是一个当代艺术展览空间的官方网站。设计目标是创建一个与实体空间相呼应的数字体验，让访客在网站上就能感受到艺术的魅力。",
+      thinking: [
+        "采用大胆的留白和沉浸式全屏图片，让艺术作品成为主角",
+        "页面切换采用视差滚动效果，营造如同在画廊漫步的感受",
+        "字体选择衬线体搭配，传达艺术馆的典雅气质",
+        "响应式设计确保移动端也有优质的浏览体验"
+      ],
+      steps: [
+        { title: "创意方向", desc: "与馆方沟通，确定数字体验的基调" },
+        { title: "视觉探索", desc: "尝试多种艺术风格的视觉方向" },
+        { title: "交互设计", desc: "设计独特的页面切换和内容展示方式" },
+        { title: "动效实现", desc: "使用GSAP实现复杂的视差滚动效果" },
+        { title: "内容编排", desc: "整理艺术品资料，设计信息展示方式" }
+      ],
+      gallery: [
+        "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=400&q=80",
+        "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=400&q=80",
+        "https://images.unsplash.com/photo-1541367777708-7905fe3296c0?w=400&q=80"
+      ]
+    },
+    {
+      id: 7,
+      title: "微光 社交App",
+      category: "motion",
+      tags: ["动效设计", "情感化设计", "交互动效"],
+      image: "https://images.unsplash.com/photo-1616469829581-75993d86b84d?w=800&q=80",
+      excerpt: "通过细腻的动效设计，传递温暖、有趣的社交体验。",
+      description: "微光是一款强调情感连接的社交应用。设计重点不在功能本身，而在于如何通过动效和微交互让用户感受到温暖和被关注。",
+      thinking: [
+        "设计了「光」作为核心视觉元素，象征温暖和连接",
+        "消息发送、收到回复等关键节点都有精心设计的动效反馈",
+        "整体动效风格轻柔、缓慢，传达不急躁的社交态度",
+        "使用Lottie实现复杂动效，保证流畅度的同时控制包体积"
+      ],
+      steps: [
+        { title: "情绪板", desc: "确定动效的情感基调，收集参考案例" },
+        { title: "动效规划", desc: "列出所有需要动效的场景和交互" },
+        { title: "制作Lottie", desc: "使用After Effects制作并导出Lottie动画" },
+        { title: "开发协作", desc: "与前端配合，确保动效性能最优" },
+        { title: "用户测试", desc: "收集用户对动效的反馈，持续优化" }
+      ],
+      gallery: [
+        "https://images.unsplash.com/photo-1616469829581-75993d86b84d?w=400&q=80",
+        "https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=400&q=80",
+        "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=400&q=80"
+      ]
+    },
+    {
+      id: 8,
+      title: "Echo 回声音乐节",
+      category: "brand",
+      tags: ["品牌视觉", "音乐节", "视觉系统"],
+      image: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
+      excerpt: "为独立音乐节打造具有冲击力的视觉系统，传递音乐的热情。",
+      description: "Echo是一个小型的独立音乐节，每年举办一次。设计需要体现「小而美」的特点，同时具有强烈的视觉冲击力，能够在社交媒体上引发传播。",
+      thinking: [
+        "视觉核心是「声波」元素，象征音乐的传播和共鸣",
+        "采用高对比度的荧光色彩，在黑暗中也能发光",
+        "设计了可拆卸的主视觉模块，便于在不同物料上应用",
+        "整体视觉具有很强的拍照属性，鼓励观众分享传播"
+      ],
+      steps: [
+        { title: "活动定位", desc: "理解音乐节的风格和目标受众" },
+        { title: "视觉概念", desc: "从「回声」概念出发，探索创意方向" },
+        { title: "主视觉设计", desc: "设计主KV和核心视觉元素" },
+        { title: "物料设计", desc: "设计海报、票务周边等所有物料" },
+        { title: "现场执行", desc: "现场视觉布置和氛围营造" }
+      ],
+      gallery: [
+        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=80",
+        "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&q=80",
+        "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=80"
+      ]
+    }
+  ];
+
+  // Render Works
+  function renderWorks(filter = 'all') {
+    const grid = document.getElementById('worksGrid');
+    const filteredWorks = filter === 'all'
+      ? works
+      : works.filter(w => w.category === filter);
+
+    grid.innerHTML = filteredWorks.map(work => `
+                <div class="work-card" data-id="${work.id}">
+                    <div class="work-image-wrapper">
+                        <img src="${work.image}" alt="${work.title}" class="work-image">
+                        <div class="work-overlay"></div>
+                        <div class="work-overlay-text">点击查看详情 →</div>
+                    </div>
+                    <div class="work-content">
+                        <div class="work-tags">
+                            ${work.tags.map(tag => `<span class="work-tag">${tag}</span>`).join('')}
+                        </div>
+                        <h3 class="work-title">${work.title}</h3>
+                        <p class="work-excerpt">${work.excerpt}</p>
+                    </div>
+                </div>
+            `).join('');
+
+    // Add click handlers
+    grid.querySelectorAll('.work-card').forEach(card => {
+      card.addEventListener('click', () => openModal(parseInt(card.dataset.id)));
+    });
+  }
+
+  // Filter Works
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderWorks(btn.dataset.filter);
+    });
+  });
+
+  // Modal Functions
+  function openModal(workId) {
+    const work = works.find(w => w.id === workId);
+    if (!work) return;
+
+    const modal = document.getElementById('modal');
+    modal.innerHTML = `
+                <img src="${work.image}" alt="${work.title}" class="modal-image">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">${work.title}</h2>
+                        <div class="modal-tags">
+                            ${work.tags.map(tag => `<span class="modal-tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                            项目概述
+                        </h3>
+                        <p>${work.description}</p>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                            设计思路
+                        </h3>
+                        <ul style="color: var(--text-muted); padding-left: 1.5rem;">
+                            ${work.thinking.map(t => `<li style="margin-bottom: 0.5rem;">${t}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                            实现步骤
+                        </h3>
+                        <div class="modal-steps">
+                            ${work.steps.map((step, i) => `
+                                <div class="step">
+                                    <div class="step-number">${i + 1}</div>
+                                    <div class="step-content">
+                                        <h4>${step.title}</h4>
+                                        <p>${step.desc}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                            相关图片
+                        </h3>
+                        <div class="modal-gallery">
+                            ${work.gallery.map(img => `<img src="${img}" alt="相关图片">`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+    document.getElementById('modalOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Custom Cursor
+  const cursor = document.querySelector('.cursor');
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  document.querySelectorAll('a, button, .work-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // Intersection Observer for animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.work-card, .process-item, .skill-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+
+  // Initialize
+  renderWorks();
+</script>
+</body>
+</html>
